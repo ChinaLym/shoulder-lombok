@@ -203,7 +203,18 @@ public class HandleLog {
 			processAnnotation(LoggingFramework.SLF4J, annotation, annotationNode, annotation.getInstance().topic());
 		}
 	}
-	
+
+	/**
+	 * Handles the {@link lombok.extern.shoulder.SLog} annotation for javac.
+	 */
+	@ProviderFor(JavacAnnotationHandler.class)
+	public static class HandleSLog extends JavacAnnotationHandler<lombok.extern.shoulder.SLog> {
+		@Override public void handle(AnnotationValues<lombok.extern.shoulder.SLog> annotation, JCAnnotation ast, JavacNode annotationNode) {
+			handleFlagUsage(annotationNode, ConfigurationKeys.LOG_SLOG_FLAG_USAGE, "@SLog", ConfigurationKeys.LOG_ANY_FLAG_USAGE, "any @Log");
+			processAnnotation(LoggingFramework.SLOG, annotation, annotationNode, annotation.getInstance().topic());
+		}
+	}
+
 	/**
 	 * Handles the {@link lombok.extern.slf4j.XSlf4j} annotation for javac.
 	 */

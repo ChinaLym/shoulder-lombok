@@ -439,7 +439,9 @@ public class ConfigurationKeys {
 	 * If set, <em>any</em> usage of {@code @Slf4j} results in a warning / error.
 	 */
 	public static final ConfigurationKey<FlagUsageType> LOG_SLF4J_FLAG_USAGE = new ConfigurationKey<FlagUsageType>("lombok.log.slf4j.flagUsage", "Emit a warning or error if @Slf4j is used.") {};
-	
+
+	public static final ConfigurationKey<FlagUsageType> LOG_SLOG_FLAG_USAGE = new ConfigurationKey<FlagUsageType>("lombok.log.shoulder.flagUsage", "Emit a warning or error if @SLog is used.") {};
+
 	/**
 	 * lombok configuration: {@code lombok.log.xslf4j.flagUsage} = {@code WARNING} | {@code ERROR}.
 	 * 

@@ -324,7 +324,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor,isolating</echo>
 			<format property="releaseTimestamp" pattern="yyyy-MM-dd" />
 		</tstamp>
 		<echo file="release-timestamp.txt">${releaseTimestamp}</echo>
-		<zip destfile="dist/lombok-${lombok.version}.jar">
+		<zip destfile="dist/shoulder-lombok-${lombok.version}.jar">
 			<fileset dir="build" includes="changelog.txt, latestchanges.html" />
 			<fileset dir="." includes="README.md" />
 			<fileset dir="." includes="LICENSE" />
@@ -357,7 +357,7 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor,isolating</echo>
 				</firstmatchmapper>
 			</mappedresources>
 		</zip>
-		<jar destfile="dist/lombok-${lombok.version}.jar" update="true">
+		<jar destfile="dist/shoulder-lombok-${lombok.version}.jar" update="true">
 			<manifest>
 				<attribute name="Premain-Class" value="lombok.launch.Agent" />
 				<attribute name="Agent-Class" value="lombok.launch.Agent" />
@@ -366,8 +366,18 @@ lombok.launch.AnnotationProcessorHider$ClaimingProcessor,isolating</echo>
 				<attribute name="Lombok-Version" value="${lombok.version}" />
 			</manifest>
 		</jar>
+        <jar destfile="dist/shoulder-lombok-${lombok.version}-sources.jar">
+            <fileset dir="src/core" />
+            <fileset dir="src/launch" />
+            <fileset dir="src/utils" />
+            <fileset dir="src/eclipseAgent" />
+            <fileset dir="src/installer" />
+            <fileset dir="src/delombok" />
+            <fileset dir="test/transform/src" />
+            <fileset dir="test/core/src" />
+        </jar>
 		<delete file="release-timestamp.txt" />
-		<copy file="dist/lombok-${lombok.version}.jar" tofile="dist/lombok.jar" />
+		<copy file="dist/shoulder-lombok-${lombok.version}.jar" tofile="dist/shoulder-lombok.jar" />
 		<property name="lombok.dist.built" value="true" />
 	</target>
 	
@@ -583,13 +593,13 @@ ${sourceWarning}</echo>
 		</condition>
 		<echo>Testing ECJ using ECJ: ${ecj.loc}</echo>
 		<java jar="${ecj.loc}" fork="true" failonerror="true">
-			<jvmarg value="-javaagent:dist/lombok.jar=ecj" />
+			<jvmarg value="-javaagent:dist/shoulder-lombok.jar=ecj" />
 			<arg value="-source" />
 			<arg value="1.6" />
 			<arg value="-target" />
 			<arg value="1.6" />
 			<arg value="-cp" />
-			<arg value="dist/lombok.jar" />
+			<arg value="dist/shoulder-lombok.jar" />
 			<arg value="test/ecj/SimpleTest.java" />
 		</java>
 	</target>
@@ -728,7 +738,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 	<target name="-test9" if="test9.run">
 		<echo>Running test suite in JDK9+ mode</echo>
 		<junit haltonfailure="no" fork="true">
-			<jvmarg value="-javaagent:dist/lombok.jar" />
+			<jvmarg value="-javaagent:dist/shoulder-lombok.jar" />
 				<jvmarg value="-Ddelombok.bootclasspath=${test.location.bootclasspath}" />
 				<jvmarg value="--add-opens" />
 				<jvmarg value="jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED" />
@@ -764,7 +774,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 	<target name="-test8" if="test8.run">
 		<echo>Running test suite in JDK6-8 mode</echo>
 		<junit haltonfailure="no" fork="true">
-			<jvmarg value="-javaagent:dist/lombok.jar" />
+			<jvmarg value="-javaagent:dist/shoulder-lombok.jar" />
 			<jvmarg value="-Ddelombok.bootclasspath=${test.location.bootclasspath}" />
 			<formatter type="plain" usefile="false" unless="tests.quiet" />
 			<classpath refid="test.path" />
@@ -860,7 +870,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 	<target name="maven" depends="-prepare-maven" description="Build a maven artifact bundle.">
 		<tar destfile="build/mavenPublish/mavenPublish.tar.bz2" compression="bzip2">
 			<tarfileset dir="dist">
-				<include name="lombok-${lombok.version}.jar" />
+				<include name="shoulder-lombok-${lombok.version}.jar" />
 				<include name="lombok-${lombok.version}-sources.jar" />
 				<include name="lombok-${lombok.version}-javadoc.jar" />
 			</tarfileset>
@@ -913,7 +923,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 			keyfile="${ssh.keyfile}"
 			knownHosts="ssh.knownHosts" />
 		<ivy:scpUpload
-			from="dist/lombok-${lombok.version}.jar"
+			from="dist/shoulder-lombok-${lombok.version}.jar"
 			to="/data/lombok/staging"
 			server="projectlombok.org"
 			username="${ssh.username}"
@@ -1014,9 +1024,9 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 		
 		<exec executable="${mvn-exe}" failifexecutionfails="false" resultproperty="mvn-result">
 			<arg value="deploy:deploy-file" />
-			<arg value="-Dfile=dist/lombok-${lombok.version}.jar" />
-			<arg value="-Dsources=dist/lombok-${lombok.version}-sources.jar" />
-			<arg value="-Djavadoc=dist/lombok-${lombok.version}-javadoc.jar" />
+			<arg value="-Dfile=dist/shoulder-lombok-${lombok.version}.jar" />
+			<arg value="-Dsources=dist/shoulder-lombok-${lombok.version}-sources.jar" />
+			<arg value="-Djavadoc=dist/shoulder-lombok-${lombok.version}-javadoc.jar" />
 			<arg value="-DgroupId=org.projectlombok" />
 			<arg value="-DartifactId=lombok" />
 			<arg value="-Dversion=edge-SNAPSHOT" />
@@ -1060,7 +1070,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 		<mkdir dir="build/useTestAp" />
 		<javac verbose="false" source="1.7" target="1.7" destdir="build/useTestAp" includeantruntime="false">
 			<src path="src/useTestAP" />
-			<classpath location="dist/lombok.jar" />
+			<classpath location="dist/shoulder-lombok.jar" />
 			<classpath location="dist/testAp.jar" />
 			<compilerarg value="-processor" />
 			<compilerarg value="lombok.launch.AnnotationProcessorHider$AnnotationProcessor,org.projectlombok.testAp.TestAp" />
@@ -1072,7 +1082,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 		<mkdir dir="build/useTestAp" />
 		<javac verbose="false" source="1.7" target="1.7" destdir="build/useTestAp" includeantruntime="false">
 			<src path="src/useTestAP" />
-			<classpath location="dist/lombok.jar" />
+			<classpath location="dist/shoulder-lombok.jar" />
 			<classpath location="dist/testAp.jar" />
 			<compilerarg value="-processor" />
 			<compilerarg value="org.projectlombok.testAp.TestAp,lombok.launch.AnnotationProcessorHider$AnnotationProcessor" />
@@ -1091,7 +1101,7 @@ You can also create your own by writing a 'testenvironment.properties' file. The
 
 	<target name="-mapstructBindingPrepare" depends="-compileMapstruct">
 		<mkdir dir="build/mapstruct-module-path" />
-		<copy file="dist/lombok.jar" todir="build/mapstruct-module-path" />
+		<copy file="dist/shoulder-lombok.jar" todir="build/mapstruct-module-path" />
 		<jar destfile="build/mapstruct-module-path/mapstruct-processor.jar" basedir="build/mapstruct" includes="org/**">
 			<manifest>
 				 <attribute name="Automatic-Module-Name" value="org.mapstruct.processor" />

@@ -73,7 +73,13 @@ public class LoggingFramework {
 		lombok.extern.flogger.Flogger.class,
 		LogDeclaration.valueOf("com.google.common.flogger.FluentLogger com.google.common.flogger.FluentLogger.forEnclosingClass()")
 	);
-	
+
+	// private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TargetType.class);
+	public static final LoggingFramework SLOG = new LoggingFramework(
+			lombok.extern.shoulder.SLog.class,
+			LogDeclaration.valueOf("org.shoulder.core.log.Logger org.shoulder.core.log.LoggerFactory.getLogger(TYPE)(TOPIC)")
+	);
+
 	private final Class<? extends Annotation> annotationClass;
 	private final String annotationAsString;
 	private final LogDeclaration declaration;

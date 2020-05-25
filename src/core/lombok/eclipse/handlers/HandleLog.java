@@ -97,7 +97,7 @@ public class HandleLog {
 			
 			ClassLiteralAccess loggingType = selfType(owner, source);
 			FieldDeclaration fieldDeclaration = createField(framework, source, loggingType, logFieldName.getName(), useStatic, loggerTopic);
-			fieldDeclaration.traverse(new SetGeneratedByVisitor(source), typeDecl.staticInitializerScope);
+			fieldDeclaration.traverse(new lombok.eclipse.handlers.SetGeneratedByVisitor(source), typeDecl.staticInitializerScope);
 			// TODO temporary workaround for issue 290. https://github.com/rzwitserloot/lombok/issues/290
 			// injectFieldSuppressWarnings(owner, fieldDeclaration);
 			injectField(owner, fieldDeclaration);
@@ -266,7 +266,17 @@ public class HandleLog {
 			processAnnotation(LoggingFramework.SLF4J, annotation, source, annotationNode, annotation.getInstance().topic());
 		}
 	}
-	
+	/**
+	 * Handles the {@link lombok.extern.shoulder.SLog} annotation for Eclipse.
+	 */
+	@ProviderFor(EclipseAnnotationHandler.class)
+	public static class HandleSLog extends EclipseAnnotationHandler<lombok.extern.shoulder.SLog> {
+		@Override public void handle(AnnotationValues<lombok.extern.shoulder.SLog> annotation, Annotation source, EclipseNode annotationNode) {
+			handleFlagUsage(annotationNode, ConfigurationKeys.LOG_SLOG_FLAG_USAGE, "@Slog", ConfigurationKeys.LOG_ANY_FLAG_USAGE, "any @Log");
+			processAnnotation(LoggingFramework.SLF4J, annotation, source, annotationNode, annotation.getInstance().topic());
+		}
+	}
+
 	/**
 	 * Handles the {@link lombok.extern.slf4j.XSlf4j} annotation for Eclipse.
 	 */
