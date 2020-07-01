@@ -14,7 +14,7 @@ It just generate a line like `private static final org.shoulder.core.log.Logger 
 
 ---
 
-To better use it in IDEA, see lombok-intellij-plugin in [gitee](https://gitee.com/ChinaLym/lombok-intellij-plugin) or [github](https://github.com/ChinaLym/lombok-intellij-plugin)
+To better use it in IDEA, see **lombok-intellij-plugin** in [gitee](https://gitee.com/ChinaLym/lombok-intellij-plugin) or [github](https://github.com/ChinaLym/lombok-intellij-plugin)
 
 
 
